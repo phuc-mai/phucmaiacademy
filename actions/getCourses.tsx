@@ -4,7 +4,7 @@ import { Course } from "@prisma/client";
 const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]> => {
   const whereClause: any = {
     isPublished: true,
-    ...(categoryId ? { categoryId } : {}), 
+    ...(categoryId ? { categoryId } : {}),
   };
 
   const courses = await db.course.findMany({
@@ -17,6 +17,7 @@ const getCoursesByCategory = async (categoryId: string | null): Promise<Course[]
         },
       },
       subCategory: true,
+      level: true,
     },
     orderBy: {
       createdAt: "desc",

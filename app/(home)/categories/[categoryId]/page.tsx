@@ -2,9 +2,12 @@ import getCoursesByCategory from "@/actions/getCourses";
 import CourseCard from "@/components/course/CourseCard";
 import Categories from "@/components/custom/Categories";
 import { db } from "@/lib/db";
-import Image from "next/image";
 
-const Home = async () => {
+const CoursesByCategory = async ({
+  params,
+}: {
+  params: { categoryId: string };
+}) => {
   const categories = await db.category.findMany({
     orderBy: {
       name: "asc",
@@ -14,18 +17,11 @@ const Home = async () => {
     },
   });
 
-  const courses = await getCoursesByCategory(null);
+  const courses = await getCoursesByCategory(params.categoryId);
 
   return (
     <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
-      {/* <Image
-        src="/home_banner.png"
-        alt="banner"
-        width={1500}
-        height={700}
-        className="md:rounded-3xl"
-      /> */}
-      <Categories categories={categories} selectedCategory={null} />
+      <Categories categories={categories} selectedCategory={params.categoryId} />
       <div className="flex flex-wrap gap-7">
         {courses.map((course) => (
           <CourseCard key={course.id} course={course} />
@@ -35,4 +31,4 @@ const Home = async () => {
   );
 };
 
-export default Home;
+export default CoursesByCategory;

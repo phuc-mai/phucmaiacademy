@@ -49,13 +49,13 @@ export const DELETE = async (
         id: params.courseId,
         instructorId: userId,
       },
-      // include: {
-      //   sections: {
-      //     include: {
-      //       muxData: true,
-      //     }
-      //   }
-      // }
+      include: {
+        sections: {
+          include: {
+            muxData: true,
+          }
+        }
+      }
     });
 
     if (!course) {

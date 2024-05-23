@@ -1,9 +1,8 @@
 import { clerkClient } from "@clerk/nextjs";
-import { Course } from "@prisma/client";
 import { Gem } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { Course } from "@prisma/client";
 import { db } from "@/lib/db";
 
 const CourseCard = async ({ course }: { course: Course }) => {
@@ -12,16 +11,15 @@ const CourseCard = async ({ course }: { course: Course }) => {
   let level;
   if (course.levelId) {
     level = await db.level.findUnique({
-      where: {
-        id: course.levelId,
-      },
+      where: { id: course.levelId },
     });
-  } else {
-    level = null;
   }
 
   return (
-    <Link href={`/courses/${course.id}/overview`} className="border rounded-xl cursor-pointer">
+    <Link
+      href={`/courses/${course.id}/overview`}
+      className="border rounded-xl cursor-pointer"
+    >
       <Image
         src={course.imageUrl ? course.imageUrl : "/image_placeholder.webp"}
         alt={course.title}
@@ -34,24 +32,28 @@ const CourseCard = async ({ course }: { course: Course }) => {
           {course.title}
         </h2>
         <div className="flex justify-between text-sm font-medium">
-          <div className="flex gap-2 items-center">
-            <Image
-              src={
-                instructor.imageUrl
-                  ? instructor.imageUrl
-                  : "/avatar_placeholder.jpg"
-              }
-              alt="profile-photo"
-              width={30}
-              height={30}
-              className="rounded-full"
-            />
-            <p>{`${instructor.firstName} ${instructor.lastName}`}</p>
-          </div>
-          <div className="flex gap-2 items-center">
-            <Gem size={20} />
-            <p>{level?.name}</p>
-          </div>
+          {instructor && (
+            <div className="flex gap-2 items-center">
+              <Image
+                src={
+                  instructor.imageUrl
+                    ? instructor.imageUrl
+                    : "/avatar_placeholder.jpg"
+                }
+                alt="profile-photo"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+              <p>{`${instructor.firstName} ${instructor.lastName}`}</p>
+            </div>
+          )}
+          {level && (
+            <div className="flex gap-2 items-center">
+              <Gem size={20} />
+              <p>{level.name}</p>
+            </div>
+          )}
         </div>
         <p className="text-md font-bold">$ {course.price}</p>
       </div>
