@@ -16,7 +16,7 @@ const Topbar = () => {
   const { userId } = useAuth();
 
   return (
-    <div className="flex justify-between items-center px-5 py-2 border-b">
+    <div className="flex justify-between items-center p-4">
       <Link href="/">
         <Image
           src="/logo.png"

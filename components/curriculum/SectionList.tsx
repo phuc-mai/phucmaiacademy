@@ -86,7 +86,7 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
                     <div className="ml-auto flex items-center gap-2">
                       {section.isFree && <Badge>Free</Badge>}
                       <Badge
-                        className={`${section.isPublished && "bg-[#FDAB04]"}`}
+                        className={`${section.isPublished && "bg-[#FDAB04] text-black hover:bg-[#FDAB04]/80"}`}
                       >
                         {section.isPublished ? "Published" : "Draft"}
                       </Badge>

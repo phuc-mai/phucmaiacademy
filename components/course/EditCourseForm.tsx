@@ -23,6 +23,7 @@ import Combobox from "@/components/custom/Combobox";
 import RichEditor from "@/components/custom/RichEditor";
 import FileUpload from "@/components/custom/FileUpload";
 import Delete from "@/components/custom/Delete";
+import PublishButton from "@/components/custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -49,12 +50,14 @@ interface EditCourseFormProps {
     subCategories: { label: string; value: string }[];
   }[];
   levels: { label: string; value: string }[];
+  isCompleted: boolean;
 }
 
 const EditCourseForm = ({
   course,
   categories,
   levels,
+  isCompleted,
 }: EditCourseFormProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -98,7 +101,7 @@ const EditCourseForm = ({
   };
 
   return (
-    <div className="py-6 px-10">
+    <>
       <div className="flex justify-between mb-7">
         <div className="flex gap-5">
           {routes.map((route) => (
@@ -117,7 +120,12 @@ const EditCourseForm = ({
         </div>
 
         <div className="flex gap-5 items-start">
-          <Button variant="outline">Publish</Button>
+          <PublishButton
+            disabled={!isCompleted}
+            courseId={course.id}
+            isPublished={course.isPublished}
+            page="Course"
+          />
           <Delete item="course" courseId={course.id} />
         </div>
       </div>
@@ -136,7 +144,9 @@ const EditCourseForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     disabled={isSubmitting}
@@ -172,7 +182,9 @@ const EditCourseForm = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <RichEditor
                     placeholder="What this course is about?"
@@ -190,7 +202,9 @@ const EditCourseForm = ({
               name="categoryId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>
+                    Category <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Combobox options={categories} {...field} />
                   </FormControl>
@@ -204,7 +218,9 @@ const EditCourseForm = ({
               name="subCategoryId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Sub Category</FormLabel>
+                  <FormLabel>
+                    Sub Category <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Combobox
                       options={
@@ -226,7 +242,9 @@ const EditCourseForm = ({
               name="levelId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Level</FormLabel>
+                  <FormLabel>
+                    Level <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Combobox options={levels} {...field} />
                   </FormControl>
@@ -241,7 +259,9 @@ const EditCourseForm = ({
             name="imageUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Banner image</FormLabel>
+                <FormLabel>
+                  Banner image <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <FileUpload
                     endpoint="courseBanner"
@@ -250,7 +270,7 @@ const EditCourseForm = ({
                     page="Edit Course"
                   />
                 </FormControl>
-                <FormMessage className="text-red-1" />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -260,7 +280,9 @@ const EditCourseForm = ({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price (USD)</FormLabel>
+                <FormLabel>
+                  Price (USD) <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -287,7 +309,7 @@ const EditCourseForm = ({
           </div>
         </form>
       </Form>
-    </div>
+    </>
   );
 };
 

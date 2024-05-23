@@ -29,6 +29,8 @@ model Course {
 
   sections Section[]
 
+  purchases Purchase[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -74,12 +76,25 @@ model Section {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  muxData MuxData?
+
   resources Resource[]
+
+  progress Progress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String
+  playbackId String?
+
+  sectionId String  @unique
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model Resource {
@@ -94,4 +109,43 @@ model Resource {
   updatedAt DateTime @updatedAt
 
   @@index([sectionId])
+}
+
+model Purchase {
+  id String @id @default(uuid())
+  customerId String
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@unique([customerId, courseId])
+  @@index([courseId])
+}
+
+model StripeCustomer {
+  id String @id @default(uuid())
+  customerId String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Progress {
+  id String @id @default(uuid())
+  studentId String @unique
+
+  sectionId String
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sectionId])
+  @@unique([studentId, sectionId])
 }

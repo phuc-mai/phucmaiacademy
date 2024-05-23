@@ -15,7 +15,11 @@ interface FileUploadProps {
 
 const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
   return (
-    <div className={`flex ${page === "Edit Section" ? "flex-col gap-2" : "items-center gap-10"}`}>
+    <div
+      className={`flex ${
+        page === "Edit Section" ? "flex-col gap-2" : "items-center gap-10"
+      }`}
+    >
       {page === "Edit Course" && value !== "" && (
         <Image
           src={value}
@@ -26,7 +30,9 @@ const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
         />
       )}
 
-      {page === "Edit Section" && value !== "" && <p className="text-sm font-medium">{value}</p>}
+      {page === "Edit Section" && value !== "" && (
+        <p className="text-sm font-medium">{value}</p>
+      )}
 
       <UploadDropzone
         endpoint={endpoint}

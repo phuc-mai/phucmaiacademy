@@ -68,10 +68,10 @@ const NewCourseForm = ({ categories }: NewCourseFormProps) => {
   return (
     <div className="p-10">
       <h1 className="text-xl font-bold">
-        Let's give some basics for your course!
+        Let us give some basics for your course!
       </h1>
       <p className="text-sm mt-3">
-        It's ok if you can't think of a good title or correct categories now.
+        It is ok if you cannot think of a good title or correct categories now.
         You can change it later.
       </p>
 

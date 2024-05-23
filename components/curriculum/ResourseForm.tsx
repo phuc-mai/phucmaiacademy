@@ -78,15 +78,15 @@ const ResourceForm = ({ section, courseId }: ResourceFormProps) => {
 
   return (
     <>
-      <h1 className="text-xl font-bold mt-12">Add Resources</h1>
+      <div className="flex gap-2 items-center text-xl font-bold mt-12"><PlusCircle /> Add Resources (optional)</div>
       <p className="text-sm font-medium mt-2">
         Add resources to this section to help your students learn better
       </p>
 
       <div className="mt-5 flex flex-col gap-5">
         {section.resources.map((resource) => (
-          <div className="flex justify-between bg-[#FFF8EB] rounded-lg text-sm font-medium p-3">
-            <div key={resource.id} className="flex items-center">
+          <div key={resource.id} className="flex justify-between bg-[#FFF8EB] rounded-lg text-sm font-medium p-3">
+            <div className="flex items-center">
               <File className="h-4 w-4 mr-4" />
               {resource.name}
             </div>

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Resource, Section } from "@prisma/client";
+import { Resource, Section, MuxData } from "@prisma/client";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -24,11 +24,15 @@ import { Input } from "@/components/ui/input";
 import RichEditor from "@/components/custom/RichEditor";
 import { Switch } from "@/components/ui/switch";
 import ResourceForm from "@/components/curriculum/ResourseForm";
-import Delete from "@/components/custom/Delete";
+import FileUpload from "../custom/FileUpload";
+import MuxPlayer from "@mux/mux-player-react";
+import PublishButton from "../custom/PublishButton";
+import Delete from "../custom/Delete";
 
 interface EditSectionFormProps {
-  section: Section & { resources: Resource[] };
+  section: Section & { resources: Resource[]; muxData?: MuxData | null };
   courseId: string;
+  isCompleted: boolean;
 }
 
 const formSchema = z.object({
@@ -37,13 +41,14 @@ const formSchema = z.object({
   }),
   description: z.string().optional(),
   videoUrl: z.string().optional(),
-  resources: z
-    .array(z.object({ name: z.string(), url: z.string() }))
-    .optional(),
   isFree: z.boolean(),
 });
 
-const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
+const EditSectionForm = ({
+  section,
+  courseId,
+  isCompleted,
+}: EditSectionFormProps) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +57,6 @@ const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
       title: section.title,
       description: section.description || "",
       videoUrl: section.videoUrl || "",
-      resources: section.resources || [],
       isFree: section.isFree,
     },
   });
@@ -61,7 +65,7 @@ const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
+      await axios.post(
         `/api/courses/${courseId}/sections/${section.id}`,
         values
       );
@@ -74,20 +78,25 @@ const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
   };
 
   return (
-    <div className="px-10 py-6">
-      <div className="flex justify-between">
+    <div>
+      <div className="flex justify-between mb-7">
         <Link href={`/instructor/courses/${courseId}/sections`}>
-          <Button variant="outline" className="text-sm font-medium mb-7">
+          <Button variant="outline" className="text-sm font-medium">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to curriculum
           </Button>
         </Link>
         <div className="flex gap-5 items-start">
-          <Button variant="outline">Publish</Button>
+          <PublishButton
+            disabled={!isCompleted}
+            courseId={courseId}
+            sectionId={section.id}
+            isPublished={section.isPublished}
+            page="Section"
+          />
           <Delete item="section" courseId={courseId} sectionId={section.id} />
         </div>
       </div>
-
       <h1 className="text-xl font-bold">Section Details</h1>
       <p className="text-sm font-medium mt-2">
         Complete this section with detailed information, good video and
@@ -101,7 +110,9 @@ const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     disabled={isSubmitting}
@@ -119,11 +130,46 @@ const EditSectionForm = ({ section, courseId }: EditSectionFormProps) => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <RichEditor
                     placeholder="What this section is about?"
                     {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {section.videoUrl && (
+            <div className="my-5">
+              <MuxPlayer
+                playbackId={section.muxData?.playbackId || ""}
+                className="md:max-w-[600px]"
+              />
+              <p className="text-sm font-medium">
+                It can take a few minutes for the video to process after.
+              </p>
+            </div>
+          )}
+
+          <FormField
+            control={form.control}
+            name="videoUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Video <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <FileUpload
+                    endpoint="sectionVideo"
+                    value={field.value || ""}
+                    onChange={(url) => field.onChange(url)}
+                    page="Edit Section"
                   />
                 </FormControl>
                 <FormMessage />
