@@ -2,25 +2,30 @@
 
 import { Course, Section } from "@prisma/client";
 import Link from "next/link";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 const SectionMenu = ({
   course,
 }: {
   course: Course & { sections: Section[] };
 }) => {
-  const [dropdownMenu, setDropdownMenu] = useState(false);
-
   return (
-    <div className="relative md:hidden">
-      <Button onClick={() => setDropdownMenu(!dropdownMenu)}>
-        Section Menu
-      </Button>
-
-      {dropdownMenu && (
-        <div className="absolute w-[250px] top-12 left-1 flex flex-col text-sm font-medium bg-white shadow-2xl rounded-lg z-20">
-          <Link href={`/courses/${course.id}/overview`} className="p-3 rounded-lg hover:bg-[#FFF8EB]">
+    <div className="w-fulll max-w-[200px] z-20 md:hidden">
+      <Sheet>
+        <SheetTrigger>
+          <Button>Section Menu</Button>
+        </SheetTrigger>
+        <SheetContent className="flex flex-col">
+          <Link
+            href={`/courses/${course.id}/overview`}
+            className="p-3 rounded-lg hover:bg-[#FFF8EB]"
+          >
             Overview
           </Link>
           {course.sections.map((section) => (
@@ -32,8 +37,8 @@ const SectionMenu = ({
               {section.title}
             </Link>
           ))}
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
