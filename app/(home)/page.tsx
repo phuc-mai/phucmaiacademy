@@ -26,7 +26,7 @@ const Home = async () => {
         className="md:rounded-3xl"
       /> */}
       <Categories categories={categories} selectedCategory={null} />
-      <div className="flex flex-wrap gap-7">
+      <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course) => (
           <CourseCard key={course.id} course={course} />
         ))}

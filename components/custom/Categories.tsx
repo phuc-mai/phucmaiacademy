@@ -19,7 +19,7 @@ const Categories = ({ categories, selectedCategory }: CatagoriesProps) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-7 justify-center my-10">
+    <div className="px-4 flex flex-wrap gap-7 justify-center my-10">
       <Button
         variant="outline"
         className={`${selectedCategory === null ? "bg-[#FDAB04]" : ""}`}

@@ -14,9 +14,14 @@ const Courses = async () => {
 
   return (
     <div className="px-6 py-4">
-      <Link href="/instructor/create-course">
-        <Button>Create New Course</Button>
-      </Link>
+      <div className="flex justify-between">
+        <Link href="/instructor/create-course">
+          <Button>Create New Course</Button>
+        </Link>
+        <Link href="/instructor/performance" className="md:hidden">
+          <Button>Performance</Button>
+        </Link>
+      </div>
 
       <div className="mt-5">
         <DataTable columns={columns} data={courses} />

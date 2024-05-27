@@ -102,7 +102,7 @@ const EditCourseForm = ({
 
   return (
     <>
-      <div className="flex justify-between mb-7">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
         <div className="flex gap-5">
           {routes.map((route) => (
             <Link
@@ -138,7 +138,7 @@ const EditCourseForm = ({
       </p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-7">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 my-7">
           <FormField
             control={form.control}
             name="title"

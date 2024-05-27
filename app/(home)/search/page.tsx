@@ -43,7 +43,7 @@ const SearchPage = async ({ searchParams }: { searchParams: { query: string } })
   const courses = await fetchCourses(queryText);
 
   return (
-    <div className="mt-10 px-4 md:px-10 xl:px-16">
+    <div className="px-4 py-6 md:px-10 xl:px-16">
       <p className="text-lg md:text-2xl font-semibold mb-10">
         Recommended courses for "{queryText}"
       </p>

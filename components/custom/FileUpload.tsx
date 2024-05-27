@@ -15,11 +15,7 @@ interface FileUploadProps {
 
 const FileUpload = ({ value, onChange, endpoint, page }: FileUploadProps) => {
   return (
-    <div
-      className={`flex ${
-        page === "Edit Section" ? "flex-col gap-2" : "items-center gap-10"
-      }`}
-    >
+    <div className="flex flex-col gap-2">
       {page === "Edit Course" && value !== "" && (
         <Image
           src={value}

@@ -12,10 +12,11 @@ const SearchInput = () => {
     if (query.trim() !== "") {
       router.push(`/search?query=${query}`);
     }
+    setQuery("")
   };
 
   return (
-    <div className="md:w-[400px] rounded-full flex">
+    <div className="max-md:hidden w-[400px] rounded-full flex">
       <input
         onChange={(e) => setQuery(e.target.value)}
         value={query}

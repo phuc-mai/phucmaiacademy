@@ -18,9 +18,10 @@ import toast from "react-hot-toast";
 import ReadText from "@/components/custom/ReadText";
 import { Button } from "@/components/ui/button";
 import ProgressButton from "@/components/curriculum/ProgressButton";
+import SectionMenu from "../course/SectionMenu";
 
 interface SectionDetailsProps {
-  course: Course;
+  course: Course & { sections: Section[] };
   section: Section;
   purchase: Purchase | null;
   muxData: MuxData | null;
@@ -58,23 +59,26 @@ const SectionDetails = ({
 
   return (
     <div className="px-6 py-4 flex flex-col gap-5">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{section.title}</h1>
-        {!purchase ? (
-          <Button onClick={buyCourse}>
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <p>Buy this course</p>
-            )}
-          </Button>
-        ) : (
-          <ProgressButton
-            courseId={course.id}
-            sectionId={section.id}
-            isCompleted={!!progress?.isCompleted}
-          />
-        )}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+        <h1 className="text-2xl font-bold max-md:mb-4">{section.title}</h1>
+        <div className="flex gap-4">
+          <SectionMenu course={course} />
+          {!purchase ? (
+            <Button onClick={buyCourse}>
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <p>Buy this course</p>
+              )}
+            </Button>
+          ) : (
+            <ProgressButton
+              courseId={course.id}
+              sectionId={section.id}
+              isCompleted={!!progress?.isCompleted}
+            />
+          )}
+        </div>
       </div>
 
       <ReadText value={section.description!} />

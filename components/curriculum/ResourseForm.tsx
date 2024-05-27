@@ -106,7 +106,7 @@ const ResourceForm = ({ section, courseId }: ResourceFormProps) => {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 my-5">
           <FormField
             control={form.control}
             name="name"

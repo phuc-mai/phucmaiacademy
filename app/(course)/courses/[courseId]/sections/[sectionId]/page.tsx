@@ -23,6 +23,9 @@ const SectionDetailsPage = async ({
       id: courseId,
       isPublished: true,
     },
+    include: {
+      sections: true
+    }
   });
 
   const section = await db.section.findUnique({
