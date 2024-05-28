@@ -81,4 +81,13 @@ body,
   }
 }
 
+.cl-formButtonPrimary {
+  color: black;
+  background-color: #FDAB04;
+}
+
+.cl-formButtonPrimary:hover {
+  background-color: rgba(	253, 171, 4, 0.8)
+}
+
 @import "~@uploadthing/react/styles.css";
