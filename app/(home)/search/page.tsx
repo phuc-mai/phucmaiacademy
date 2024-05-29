@@ -45,7 +45,7 @@ const SearchPage = async ({ searchParams }: { searchParams: { query: string } })
   return (
     <div className="px-4 py-6 md:px-10 xl:px-16">
       <p className="text-lg md:text-2xl font-semibold mb-10">
-        Recommended courses for "{queryText}"
+        Recommended courses for {queryText}
       </p>
       <div className="flex gap-4 flex-wrap">
         {courses.map((course) => (
