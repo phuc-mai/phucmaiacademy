@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
@@ -6,11 +7,22 @@ import { DataTable } from "@/components/custom/DataTable";
 import { columns } from "@/components/course/Columns";
 
 const Courses = async () => {
-  const courses = await db.course.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const { userId } = auth();
+
+  let courses = []
+
+  if (userId) {
+    courses = await db.course.findMany({
+      where: {
+        instructorId: userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } else {
+    return null
+  }
 
   return (
     <div className="px-6 py-4">
