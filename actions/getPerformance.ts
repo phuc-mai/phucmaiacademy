@@ -4,14 +4,15 @@ import { Course, Purchase } from "@prisma/client";
 type PurchaseWithCourse = Purchase & { course: Course };
 
 const groupByCourse = (purchases: PurchaseWithCourse[]) => {
-  const grouped: { [courseTitle: string]: number } = {};
+  const grouped: { [courseTitle: string]: { total: number, count: number } } = {};
 
   purchases.forEach((purchase) => {
     const courseTitle = purchase.course.title;
     if (!grouped[courseTitle]) {
-      grouped[courseTitle] = 0;
+      grouped[courseTitle] = { total: 0, count: 0 };
     }
-    grouped[courseTitle] += purchase.course.price!;
+    grouped[courseTitle].total += purchase.course.price!;
+    grouped[courseTitle].count += 1;
   });
 
   return grouped;
@@ -26,14 +27,15 @@ export const getPerformance = async (userId: string) => {
 
     const groupedEarnings = groupByCourse(purchases);
     const data = Object.entries(groupedEarnings).map(
-      ([courseTitle, total]) => ({
+      ([courseTitle, { total, count }]) => ({
         name: courseTitle,
-        total: total,
+        total,
+        count,
       })
     );
 
     const totalRevenue = data.reduce((acc, current) => acc + current.total, 0);
-    const totalSales = data.length;
+    const totalSales = purchases.length; // Total number of purchases
 
     return {
       data,
@@ -45,6 +47,7 @@ export const getPerformance = async (userId: string) => {
     return {
       data: [],
       totalRevenue: 0,
+      totalSales: 0,
     };
   }
 };
