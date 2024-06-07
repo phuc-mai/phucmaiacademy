@@ -8,11 +8,26 @@ import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/custom/SearchInput";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { usePathname } from "next/navigation";
 
 const Topbar = () => {
+  const pathname = usePathname();
+
   const topRoutes = [
     { label: "Instructor", path: "/instructor/courses" },
     { label: "Learning", path: "/learning" },
+  ];
+
+  const sideRoutes = [
+    {
+      label: "Courses",
+      path: "/instructor/courses",
+    },
+    {
+      label: "Performance",
+      path: "/instructor/performance",
+    },
   ];
 
   const { userId } = useAuth();
@@ -45,24 +60,38 @@ const Topbar = () => {
           ))}
         </div>
 
-        <div className="relative flex gap-4 items-center z-20">
-          <Menu
-            className="cursor-pointer sm:hidden"
-            onClick={() => setDropdownMenu(!dropdownMenu)}
-          />
-          {dropdownMenu && (
-            <div className="absolute top-7 right-1 flex flex-col gap-5 p-3 bg-white shadow-2xl rounded-lg">
-              {topRoutes.map((route) => (
-                <Link
-                  href={route.path}
-                  key={route.path}
-                  className="flex gap-4 text-sm font-medium hover:text-[#FDAB04]"
-                >
-                  {route.label}
-                </Link>
-              ))}
-            </div>
-          )}
+        <div className="w-full max-w-[200px] z-20 sm:hidden">
+          <Sheet>
+            <SheetTrigger>
+              <Menu className="h-6 w-6" />
+            </SheetTrigger>
+            <SheetContent className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4">
+                {topRoutes.map((route) => (
+                  <Link
+                    key={route.path}
+                    href={route.path}
+                    className="text-sm font-medium hover:text-[#FDAB04]"
+                  >
+                    {route.label}
+                  </Link>
+                ))}
+              </div>
+              {pathname.startsWith("/instructor") && (
+                <div className="flex flex-col gap-4">
+                  {sideRoutes.map((route) => (
+                    <Link
+                      key={route.path}
+                      href={route.path}
+                      className="text-sm font-medium hover:text-[#FDAB04]"
+                    >
+                      {route.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </SheetContent>
+          </Sheet>
         </div>
 
         {userId ? (
